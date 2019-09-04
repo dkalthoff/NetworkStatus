@@ -4,7 +4,8 @@
 
 char ssid[] = SECRET_SSID;        // your network SSID (name)
 int status = WL_IDLE_STATUS;     // the Wifi radio's status
-WiFiClient client;
+
+WiFiClient httpClient;;
 
 void connectToWiFi()
 {
@@ -34,6 +35,32 @@ void connectToWiFi()
   Serial.print("You're connected to the network");
   printCurrentNet();
   printWifiData();
+}
+
+String getHttpResponse(IPAddress server, String url)
+{
+  if (httpClient.connect(server, 80)) {
+    Serial.println("connected to server");
+    // Make a HTTP request:
+    httpClient.println("GET " + url + " HTTP/1.1");
+    httpClient.println("Host: 192");
+    httpClient.println("Connection: close");
+    httpClient.println();
+  }
+
+  String response = "";
+  while (httpClient.available()) {
+    response.concat(httpClient.read());
+  }
+
+  // if the server's disconnected, stop the client:
+  if (!httpClient.connected()) {
+    Serial.println();
+    Serial.println("disconnecting from server.");
+    httpClient.stop();
+  }
+
+  return response;
 }
 
 void printWifiData() {
