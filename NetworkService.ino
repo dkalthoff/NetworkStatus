@@ -33,14 +33,18 @@ void connectToWiFi()
 
   // you're connected now, so print out the data:
   Serial.print("You're connected to the network");
+  Serial.println();
   printCurrentNet();
+  Serial.println();
   printWifiData();
+  Serial.println();
 }
 
 String getHttpResponse(IPAddress server, String url)
 {
   if (httpClient.connect(server, 80)) {
-    Serial.println("connected to server");
+    Serial.print("connected to server ");
+    Serial.println(server);
     // Make a HTTP request:
     httpClient.println("GET " + url + " HTTP/1.1");
     httpClient.println("Host: 192");
@@ -49,25 +53,32 @@ String getHttpResponse(IPAddress server, String url)
   }
 
   String response = "";
-  while (httpClient.available()) {
-    response.concat(httpClient.read());
+  bool waitingForResponse = true;
+  while(waitingForResponse)
+  {
+    while (httpClient.available()) {
+      response.concat(httpClient.readStringUntil('\r'));
+    }
+  
+    // if the server's disconnected, stop the client:
+    if (!httpClient.connected()) {
+      Serial.println();
+      Serial.println("disconnecting from server.");
+      httpClient.stop();
+      waitingForResponse = false;
+    }
   }
-
-  // if the server's disconnected, stop the client:
-  if (!httpClient.connected()) {
-    Serial.println();
-    Serial.println("disconnecting from server.");
-    httpClient.stop();
-  }
+  
+  Serial.println(response);
 
   return response;
 }
 
 void printWifiData() {
+  Serial.println("**************************");
   // print your board's IP address:
   IPAddress ip = WiFi.localIP();
   Serial.print("IP Address: ");
-  Serial.println(ip);
   Serial.println(ip);
 
   // print your MAC address:
@@ -85,9 +96,12 @@ void printWifiData() {
   IPAddress gateway = WiFi.gatewayIP();
   Serial.print("Gateway: ");
   Serial.println(gateway);
+  Serial.println("**************************");
 }
 
 void printCurrentNet() {
+  Serial.println("**************************");
+  
   // print the SSID of the network you're attached to:
   Serial.print("SSID: ");
   Serial.println(WiFi.SSID());
@@ -107,6 +121,8 @@ void printCurrentNet() {
   byte encryption = WiFi.encryptionType();
   Serial.print("Encryption Type:");
   Serial.println(encryption, HEX);
+
+  Serial.println("**************************");
 }
 
 void printMacAddress(byte mac[]) {

@@ -9,7 +9,8 @@ void setup()
   initSerialCommunications();
   initDisplay();
   connectToWiFi();
-  sendToDisplay("Connected to WiFi", 1);
+  sendToDisplay("Connected to WiFi", 0);
+  sendToDisplay("test", 1);
 }
 
 void loop() {
@@ -19,7 +20,7 @@ void loop() {
   Serial.println("PiHole 2:");
   Serial.println(getSummaryStats(pihole2));
   Serial.println();
-  delay(1000); 
+  delay(60000); 
 }
 
 void initSerialCommunications()
