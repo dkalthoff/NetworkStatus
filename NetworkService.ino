@@ -1,11 +1,16 @@
 #include <SPI.h>
 #include <WiFiNINA.h>
+#include <ArduinoHttpClient.h>
+#include <ArduinoJson.h>
 #include "secrets.h"
 
 char ssid[] = SECRET_SSID;        // your network SSID (name)
 int status = WL_IDLE_STATUS;     // the Wifi radio's status
 
-WiFiClient httpClient;;
+WiFiClient wifiClient;
+
+const size_t capacity = 2*JSON_OBJECT_SIZE(3) + JSON_OBJECT_SIZE(17) + 380;
+DynamicJsonDocument doc(capacity);
 
 void connectToWiFi()
 {
@@ -40,38 +45,23 @@ void connectToWiFi()
   Serial.println();
 }
 
-String getHttpResponse(IPAddress server, String url)
+String getHttpResponse(char serverAddress[], String url)
 {
-  if (httpClient.connect(server, 80)) {
-    Serial.print("connected to server ");
-    Serial.println(server);
-    // Make a HTTP request:
-    httpClient.println("GET " + url + " HTTP/1.1");
-    httpClient.println("Host: 192");
-    httpClient.println("Connection: close");
-    httpClient.println();
-  }
+  HttpClient httpClient = HttpClient(wifiClient, serverAddress, 80);
+  httpClient.get(url);
 
-  String response = "";
-  bool waitingForResponse = true;
-  while(waitingForResponse)
-  {
-    while (httpClient.available()) {
-      response.concat(httpClient.readStringUntil('\r'));
-    }
-  
-    // if the server's disconnected, stop the client:
-    if (!httpClient.connected()) {
-      Serial.println();
-      Serial.println("disconnecting from server.");
-      httpClient.stop();
-      waitingForResponse = false;
-    }
-  }
-  
-  Serial.println(response);
+  int statusCode = httpClient.responseStatusCode();
+  String response = httpClient.responseBody();
 
-  return response;
+  deserializeJson(doc, json);
+
+  int dns_queries_today = doc["dns_queries_today"]; // 2161
+  int ads_blocked_today = doc["ads_blocked_today"]; // 10
+
+  Serial.print("DNS Queries Today: ");
+  Serial.println(dns_queries_today);
+  Serial.print("Blocked: ");
+  Serial.println(ads_blocked_today);
 }
 
 void printWifiData() {
