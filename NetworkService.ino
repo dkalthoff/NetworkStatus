@@ -1,16 +1,13 @@
 #include <SPI.h>
 #include <WiFiNINA.h>
 #include <ArduinoHttpClient.h>
-#include <ArduinoJson.h>
+
 #include "secrets.h"
 
 char ssid[] = SECRET_SSID;        // your network SSID (name)
 int status = WL_IDLE_STATUS;     // the Wifi radio's status
 
 WiFiClient wifiClient;
-
-const size_t capacity = 2*JSON_OBJECT_SIZE(3) + JSON_OBJECT_SIZE(17) + 380;
-DynamicJsonDocument doc(capacity);
 
 void connectToWiFi()
 {
@@ -52,16 +49,14 @@ String getHttpResponse(char serverAddress[], String url)
 
   int statusCode = httpClient.responseStatusCode();
   String response = httpClient.responseBody();
-
-  deserializeJson(doc, json);
-
-  int dns_queries_today = doc["dns_queries_today"]; // 2161
-  int ads_blocked_today = doc["ads_blocked_today"]; // 10
-
-  Serial.print("DNS Queries Today: ");
-  Serial.println(dns_queries_today);
-  Serial.print("Blocked: ");
-  Serial.println(ads_blocked_today);
+  
+  Serial.print("Response from ");
+  Serial.print(serverAddress);
+  Serial.print(" StatusCode: ");
+  Serial.println(statusCode);
+  Serial.println(response);
+  
+  return response;
 }
 
 void printWifiData() {

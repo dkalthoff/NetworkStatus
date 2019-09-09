@@ -1,8 +1,8 @@
 #include <SPI.h>
 #include <WiFiNINA.h>
 
-IPAddress pihole1(192,168,1,3);
-IPAddress pihole2(192,168,1,4);
+char pihole1ServerAddress[] = "192.168.1.3";
+char pihole2ServerAddress[] = "192.168.1.4";
 
 void setup() 
 {
@@ -15,10 +15,10 @@ void setup()
 
 void loop() {
   Serial.println("PiHole 1:");
-  Serial.println(getSummaryStats(pihole1));
+  Serial.println(getSummaryStats(pihole1ServerAddress));
   Serial.println();
   Serial.println("PiHole 2:");
-  Serial.println(getSummaryStats(pihole2));
+  Serial.println(getSummaryStats(pihole2ServerAddress));
   Serial.println();
   delay(60000); 
 }
