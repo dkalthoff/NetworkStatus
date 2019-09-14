@@ -55,7 +55,11 @@ String getHttpResponse(char serverAddress[], String url)
   Serial.print(" StatusCode: ");
   Serial.println(statusCode);
   Serial.println(response);
-  
+
+  if(!wifiClient.connected())
+  {
+    wifiClient.stop();
+  }
   return response;
 }
 

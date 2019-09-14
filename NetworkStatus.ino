@@ -15,11 +15,11 @@ void setup()
 
 void loop() {
   Serial.println("PiHole 1:");
-  Serial.println(getSummaryStats(pihole1ServerAddress));
-  Serial.println();
+  getSummaryStats(pihole1ServerAddress);
+  
   Serial.println("PiHole 2:");
-  Serial.println(getSummaryStats(pihole2ServerAddress));
-  Serial.println();
+  getSummaryStats(pihole2ServerAddress);
+
   delay(60000); 
 }
 

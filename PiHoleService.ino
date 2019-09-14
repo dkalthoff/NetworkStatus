@@ -4,7 +4,7 @@
 const size_t capacity = 2*JSON_OBJECT_SIZE(3) + JSON_OBJECT_SIZE(17) + 380;
 DynamicJsonDocument doc(capacity);
 
-String getSummaryStats(char serverAddress[])
+void getSummaryStats(char serverAddress[])
 {
   deserializeJson(doc, getHttpResponse(serverAddress, "/admin/api.php"));
 
