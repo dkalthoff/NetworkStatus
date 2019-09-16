@@ -1,4 +1,3 @@
-#include <SPI.h>
 #include <WiFiNINA.h>
 #include <ArduinoHttpClient.h>
 
@@ -42,7 +41,7 @@ void connectToWiFi()
   Serial.println();
 }
 
-String getHttpResponse(char serverAddress[], String url)
+String getHttpResponse(const char serverAddress[], const char url[])
 {
   HttpClient httpClient = HttpClient(wifiClient, serverAddress, 80);
   httpClient.get(url);

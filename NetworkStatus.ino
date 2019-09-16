@@ -1,29 +1,47 @@
-#include <SPI.h>
-#include <WiFiNINA.h>
+#include <ArduinoJson.h>
 
-char pihole1ServerAddress[] = "192.168.1.3";
-char pihole2ServerAddress[] = "192.168.1.4";
+const char _pihole1ServerAddress[] = "192.168.1.3";
+const char _pihole2ServerAddress[] = "192.168.1.4";
+const size_t _piHoleSummaryCapacity = 2*JSON_OBJECT_SIZE(3) + JSON_OBJECT_SIZE(17) + 380;
+const char _piHoleUrl[] = "/admin/api.php";
 
 void setup() 
 {
-  initSerialCommunications();
-  initDisplay();
+  setupSerialCommunications();
+  configureDisplay();
   connectToWiFi();
-  sendToDisplay("Connected to WiFi", 0);
-  sendToDisplay("test", 1);
 }
 
-void loop() {
-  Serial.println("PiHole 1:");
-  getSummaryStats(pihole1ServerAddress);
-  
-  Serial.println("PiHole 2:");
-  getSummaryStats(pihole2ServerAddress);
-
-  delay(60000); 
+void loop() 
+{
+  displayPiHoleSummary();
 }
 
-void initSerialCommunications()
+void displayPiHoleSummary()
+{
+  DynamicJsonDocument piHole1Data(_piHoleSummaryCapacity);
+  DynamicJsonDocument piHole2Data(_piHoleSummaryCapacity);
+  deserializeJson(piHole1Data, getHttpResponse(_pihole1ServerAddress, _piHoleUrl));
+  deserializeJson(piHole2Data, getHttpResponse(_pihole2ServerAddress, _piHoleUrl));
+
+  unsigned long dnsQueriesToday = ((long)piHole1Data["dns_queries_today"]) + ((long)piHole2Data["dns_queries_today"]);
+  unsigned long adsBlockedToday = ((long)piHole1Data["ads_blocked_today"]) + ((long)piHole2Data["ads_blocked_today"]);
+  unsigned long dnsQueriesCachedToday = ((long)piHole1Data["queries_cached"]) + ((long)piHole2Data["queries_cached"]);
+  byte percentageBlocked = (adsBlockedToday / dnsQueriesToday) * 100;
+  byte percentageCached = (dnsQueriesToday / dnsQueriesCachedToday) * 100;
+
+  sendToDisplay("Blocked " + String(percentageBlocked) + "%", 0);
+  sendToDisplay(String(adsBlockedToday) + "/" + String(dnsQueriesToday), 1);
+
+  delay(5000);
+
+  sendToDisplay("Cached " + String(percentageCached) + "%", 0);
+  sendToDisplay(String(dnsQueriesCachedToday) + "/" + String(dnsQueriesToday), 1);
+
+  delay(5000);
+}
+
+void setupSerialCommunications()
 {
   // Open serial communications and wait for port to open:
   Serial.begin(9600);
