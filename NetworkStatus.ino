@@ -30,16 +30,17 @@ void displayPiHoleSummary()
   unsigned long dnsQueriesCachedToday = ((unsigned long)piHole1Data["queries_cached"]) + ((unsigned long)piHole2Data["queries_cached"]);
   
   // Blocked
-  byte percentageBlocked = (dnsQueriesToday / adsBlockedToday) * 100;
+  Serial.println(adsBlockedToday/dnsQueriesToday);
+  byte percentageBlocked = ((float)adsBlockedToday / dnsQueriesToday) * 100;
   String row1Message = "Blocked " + String(percentageBlocked) + "%";
-  String row2Message = String(adsBlockedToday) + "/" + String(dnsQueriesToday);
+  String row2Message = String(adsBlockedToday) + " of " + String(dnsQueriesToday);
   sendToDisplay(row1Message, row2Message);
   delay(5000);
 
   // Cached
-  byte percentageCached = (dnsQueriesToday / dnsQueriesCachedToday) * 100;
+  byte percentageCached = ((float)dnsQueriesCachedToday / dnsQueriesToday) * 100;
   row1Message = "Cached " + String(percentageCached) + "%";
-  row2Message = String(dnsQueriesCachedToday) + "/" + String(dnsQueriesToday);
+  row2Message = String(dnsQueriesCachedToday) + " of " + String(dnsQueriesToday);
   sendToDisplay(row1Message, row2Message);
   delay(5000);
 
@@ -60,7 +61,7 @@ void setupSerialCommunications()
 {
   // Open serial communications and wait for port to open:
   Serial.begin(9600);
-  while (!Serial) {
-    ; // wait for serial port to connect. Needed for native USB port only
-  }
+  //while (!Serial) {
+  // ; // wait for serial port to connect. Needed for native USB port only
+  //}
 }

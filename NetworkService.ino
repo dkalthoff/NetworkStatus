@@ -3,7 +3,10 @@
 
 #include "secrets.h"
 
-char ssid[] = SECRET_SSID;        // your network SSID (name)
+char houseSSID[] = HOUSE_SECRET_SSID;
+char housePwd[] = HOUSE_SECRET_PASSWORD;
+char shedSSID[] = SHED_SECRET_SSID;
+
 int status = WL_IDLE_STATUS;     // the Wifi radio's status
 
 WiFiClient wifiClient;
@@ -24,9 +27,17 @@ void connectToWiFi()
 
   // attempt to connect to Wifi network:
   while (status != WL_CONNECTED) {
+    
     Serial.print("Attempting to connect to open SSID: ");
-    Serial.println(ssid);
-    status = WiFi.begin(ssid);
+    Serial.println(shedSSID);
+    status = WiFi.begin(shedSSID);
+    
+    if(status != WL_CONNECTED)
+    {
+      Serial.print("Attempting to connect to open SSID: ");
+      Serial.println(houseSSID);
+      status = WiFi.begin(housePwd); 
+    }
 
     // wait 10 seconds for connection:
     delay(10000);
