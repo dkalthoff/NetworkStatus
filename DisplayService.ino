@@ -8,8 +8,11 @@ void configureDisplay()
   lcd.begin(16, 2);
 }
 
-void sendToDisplay(String message, int row)
+void sendToDisplay(String row1Message, String row2Message)
 {
-  lcd.setCursor(0,row);
-  lcd.print(message);
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print(row1Message);
+  lcd.setCursor(0,1);
+  lcd.print(row2Message);
 }
