@@ -1,10 +1,5 @@
-#include <ArduinoJson.h>
 #include <TimeLib.h>
-
-const char _pihole1ServerAddress[] = "192.168.1.3";
-const char _pihole2ServerAddress[] = "192.168.1.4";
-const size_t _piHoleSummaryCapacity = 2*JSON_OBJECT_SIZE(3) + JSON_OBJECT_SIZE(17) + 380;
-const char _piHoleUrl[] = "/admin/api.php";
+#include "PiHoleService.h"
 
 void setup() 
 {
@@ -20,39 +15,32 @@ void loop()
 
 void displayPiHoleSummary()
 {
-  DynamicJsonDocument piHole1Data(_piHoleSummaryCapacity);
-  DynamicJsonDocument piHole2Data(_piHoleSummaryCapacity);
-  deserializeJson(piHole1Data, getHttpResponse(_pihole1ServerAddress, _piHoleUrl));
-  deserializeJson(piHole2Data, getHttpResponse(_pihole2ServerAddress, _piHoleUrl));
-
-  unsigned long dnsQueriesToday = ((unsigned long)piHole1Data["dns_queries_today"]) + ((unsigned long)piHole2Data["dns_queries_today"]);
-  unsigned long adsBlockedToday = ((unsigned long)piHole1Data["ads_blocked_today"]) + ((unsigned long)piHole2Data["ads_blocked_today"]);
-  unsigned long dnsQueriesCachedToday = ((unsigned long)piHole1Data["queries_cached"]) + ((unsigned long)piHole2Data["queries_cached"]);
+  struct PiHoleSummary piHoleSummary;
+  
+ piHoleSummary = getPiHoleSummary();
   
   // Blocked
-  Serial.println(adsBlockedToday/dnsQueriesToday);
-  byte percentageBlocked = ((float)adsBlockedToday / dnsQueriesToday) * 100;
+  Serial.println(piHoleSummary.adsBlockedToday/piHoleSummary.dnsQueriesToday);
+  byte percentageBlocked = ((float)piHoleSummary.adsBlockedToday / piHoleSummary.dnsQueriesToday) * 100;
   String row1Message = "Blocked " + String(percentageBlocked) + "%";
-  String row2Message = String(adsBlockedToday) + " of " + String(dnsQueriesToday);
+  String row2Message = String(piHoleSummary.adsBlockedToday) + " of " + String(piHoleSummary.dnsQueriesToday);
   sendToDisplay(row1Message, row2Message);
   delay(5000);
 
   // Cached
-  byte percentageCached = ((float)dnsQueriesCachedToday / dnsQueriesToday) * 100;
+  byte percentageCached = ((float)piHoleSummary.dnsQueriesCachedToday / piHoleSummary.dnsQueriesToday) * 100;
   row1Message = "Cached " + String(percentageCached) + "%";
-  row2Message = String(dnsQueriesCachedToday) + " of " + String(dnsQueriesToday);
+  row2Message = String(piHoleSummary.dnsQueriesCachedToday) + " of " + String(piHoleSummary.dnsQueriesToday);
   sendToDisplay(row1Message, row2Message);
   delay(5000);
 
   // Black List Update
-  time_t piHole1Updated = piHole1Data["absolute"];
-  time_t piHole2Updated = piHole2Data["absolute"];
   row1Message = "PiHole1 BlkList";
-  row2Message = "Updated:" + String(month(piHole1Updated)) + "/" + String(day(piHole1Updated)) + "/" + String(year(piHole1Updated));
+  row2Message = "Updated:" + String(month(piHoleSummary.piHole1Updated)) + "/" + String(day(piHoleSummary.piHole1Updated)) + "/" + String(year(piHoleSummary.piHole1Updated));
   sendToDisplay(row1Message, row2Message);
   delay(3000);
   row1Message = "PiHole2 BlkList";
-  row2Message = "Updated:" + String(month(piHole2Updated)) + "/" + String(day(piHole2Updated)) + "/" + String(year(piHole2Updated));
+  row2Message = "Updated:" + String(month(piHoleSummary.piHole2Updated)) + "/" + String(day(piHoleSummary.piHole2Updated)) + "/" + String(year(piHoleSummary.piHole2Updated));
   sendToDisplay(row1Message, row2Message);
   delay(3000);
 }
