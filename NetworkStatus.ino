@@ -15,10 +15,8 @@ void loop()
 
 void displayPiHoleSummary()
 {
-  struct PiHoleSummary piHoleSummary;
-  
- piHoleSummary = getPiHoleSummary();
-  
+  struct PiHoleSummary piHoleSummary = getPiHoleSummary();
+    
   // Blocked
   Serial.println(piHoleSummary.adsBlockedToday/piHoleSummary.dnsQueriesToday);
   byte percentageBlocked = ((float)piHoleSummary.adsBlockedToday / piHoleSummary.dnsQueriesToday) * 100;
@@ -36,11 +34,11 @@ void displayPiHoleSummary()
 
   // Black List Update
   row1Message = "PiHole1 BlkList";
-  row2Message = "Updated:" + String(month(piHoleSummary.piHole1Updated)) + "/" + String(day(piHoleSummary.piHole1Updated)) + "/" + String(year(piHoleSummary.piHole1Updated));
+  row2Message = "Updated:" + String(month(piHoleSummary.piHole1Updated)) + "/" + String(day(piHoleSummary.piHole1Updated)) + "/" + String(year(piHoleSummary.piHole1Updated)).substring(2);
   sendToDisplay(row1Message, row2Message);
   delay(3000);
   row1Message = "PiHole2 BlkList";
-  row2Message = "Updated:" + String(month(piHoleSummary.piHole2Updated)) + "/" + String(day(piHoleSummary.piHole2Updated)) + "/" + String(year(piHoleSummary.piHole2Updated));
+  row2Message = "Updated:" + String(month(piHoleSummary.piHole2Updated)) + "/" + String(day(piHoleSummary.piHole2Updated)) + "/" + String(year(piHoleSummary.piHole2Updated)).substring(2);
   sendToDisplay(row1Message, row2Message);
   delay(3000);
 }

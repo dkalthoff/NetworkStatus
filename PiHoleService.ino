@@ -17,8 +17,8 @@ struct PiHoleSummary getPiHoleSummary()
   piHoleSummary.dnsQueriesToday = ((unsigned long)piHole1Data["dns_queries_today"]) + ((unsigned long)piHole2Data["dns_queries_today"]);
   piHoleSummary.adsBlockedToday = ((unsigned long)piHole1Data["ads_blocked_today"]) + ((unsigned long)piHole2Data["ads_blocked_today"]);
   piHoleSummary.dnsQueriesCachedToday = ((unsigned long)piHole1Data["queries_cached"]) + ((unsigned long)piHole2Data["queries_cached"]);
-  piHoleSummary.piHole1Updated = piHole1Data["absolute"];
-  piHoleSummary.piHole2Updated = piHole2Data["absolute"];
+  piHoleSummary.piHole1Updated = ((JsonObject)piHole1Data["gravity_last_updated"])["absolute"];
+  piHoleSummary.piHole2Updated = ((JsonObject)piHole2Data["gravity_last_updated"])["absolute"];
   
   return piHoleSummary;
 }
