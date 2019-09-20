@@ -52,7 +52,7 @@ void connectToWiFi()
   Serial.println();
 }
 
-String getHttpResponse(const char serverAddress[], const char url[])
+String getHttpResponse(String serverAddress, String url)
 {
   HttpClient httpClient = HttpClient(wifiClient, serverAddress, 80);
   httpClient.get(url);

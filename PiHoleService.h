@@ -8,6 +8,8 @@ struct PiHoleSummary
   unsigned long dnsQueriesCachedToday;
   unsigned long piHole1Updated;
   unsigned long piHole2Updated;
+  String piHole1RecentBlockedDomain;
+  String piHole2RecentBlockedDomain;
 };
 
 #endif
