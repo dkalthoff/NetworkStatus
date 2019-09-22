@@ -30,20 +30,20 @@ void displayPiHoleSummary()
   {
     String row1Message = "Recent Blocked";
     String row2Message = piHoleSummary.piHole1RecentBlockedDomain;
-    sendToDisplayAutoScroll(row1Message, row2Message);
-    delay(5000);
+    sendToDisplay(row1Message, row2Message);
+    delay(1000);
   }
   else
   {
     String row1Message = "Recent Blocked PiHole1";
     String row2Message = piHoleSummary.piHole1RecentBlockedDomain;
-    sendToDisplayAutoScroll(row1Message, row2Message);
-    delay(5000);
+    sendToDisplay(row1Message, row2Message);
+    delay(1000);
 
     row1Message = "Recent Blocked PiHole2";
     row2Message = piHoleSummary.piHole2RecentBlockedDomain;
-    sendToDisplayAutoScroll(row1Message, row2Message);
-    delay(5000);
+    sendToDisplay(row1Message, row2Message);
+    delay(1000);
   }
 
   // Cached
