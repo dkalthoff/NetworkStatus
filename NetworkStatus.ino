@@ -28,24 +28,23 @@ void displayPiHoleSummary()
   // Recently Blocked Domain
   if(piHoleSummary.piHole1RecentBlockedDomain == piHoleSummary.piHole2RecentBlockedDomain)
   {
-    String row1Message = "Recent Blocked";
+    String row1Message = "Blocked";
     String row2Message = piHoleSummary.piHole1RecentBlockedDomain;
     sendToDisplay(row1Message, row2Message);
-    delay(1000);
   }
   else
   {
-    String row1Message = "Recent Blocked PiHole1";
+    String row1Message = "Blocked PiHole1";
     String row2Message = piHoleSummary.piHole1RecentBlockedDomain;
     sendToDisplay(row1Message, row2Message);
-    delay(1000);
+    delay(5000);
 
-    row1Message = "Recent Blocked PiHole2";
+    row1Message = "Blocked PiHole2";
     row2Message = piHoleSummary.piHole2RecentBlockedDomain;
     sendToDisplay(row1Message, row2Message);
-    delay(1000);
   }
-
+  delay(5000);
+  
   // Cached
   byte percentageCached = ((float)piHoleSummary.dnsQueriesCachedToday / piHoleSummary.dnsQueriesToday) * 100;
   row1Message = "Cached " + String(percentageCached) + "%";
