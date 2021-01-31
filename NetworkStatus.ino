@@ -1,3 +1,4 @@
+#include "arduino_secrets.h"
 #include <TimeLib.h>
 #include "PiHoleService.h"
 

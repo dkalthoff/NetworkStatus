@@ -1,12 +1,6 @@
 #include <WiFiNINA.h>
 #include <ArduinoHttpClient.h>
 
-#include "secrets.h"
-
-char houseSSID[] = HOUSE_SECRET_SSID;
-char housePwd[] = HOUSE_SECRET_PASSWORD;
-char shedSSID[] = SHED_SECRET_SSID;
-
 int status = WL_IDLE_STATUS;     // the Wifi radio's status
 
 WiFiClient wifiClient;
@@ -29,14 +23,14 @@ void connectToWiFi()
   while (status != WL_CONNECTED) {
     
     Serial.print("Attempting to connect to open SSID: ");
-    Serial.println(shedSSID);
-    status = WiFi.begin(shedSSID);
+    Serial.println(SECRET_SHED_SSID);
+    status = WiFi.begin(SECRET_SHED_SSID, SECRET_SHED_PASSWORD);
     
     if(status != WL_CONNECTED)
     {
       Serial.print("Attempting to connect to open SSID: ");
-      Serial.println(houseSSID);
-      status = WiFi.begin(housePwd); 
+      Serial.println(SECRET_HOUSE_SSID);
+      status = WiFi.begin(SECRET_HOUSE_SSID, SECRET_HOUSE_PASSWORD); 
     }
 
     // wait 10 seconds for connection:

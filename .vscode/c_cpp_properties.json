@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "/home/dkalthoff/.arduino15/packages/arduino/tools/**",
+                "/home/dkalthoff/Arduino/libraries/**",
+                "/snap/bin/libraries/**",
+                "/home/dkalthoff/.arduino15/packages/arduino/hardware/samd/1.8.11/**",
+                "${workspaceFolder}/**"
+            ],
+            "defines": [
+                "USBCON"
+            ],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu17",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "gcc-x64",
+            "forcedInclude": [
+                "/home/dkalthoff/.arduino15/packages/arduino/hardware/samd/1.8.11/cores/arduino/Arduino.h"
+            ]
+        }
+    ],
+    "version": 4
+}

@@ -9,7 +9,7 @@ const String _piHoleSummaryUrl = "/admin/api.php";
 DynamicJsonDocument _piHole1Data(_piHoleSummaryCapacity);
 DynamicJsonDocument _piHole2Data(_piHoleSummaryCapacity);
 
-const String _piHoleRecentBlockedUrl = "/admin/api.php?recentBlocked";
+String _piHoleRecentBlockedUrl = "/admin/api.php?recentBlocked&auth=" + String(SECRET_API_TOKEN);
   
 struct PiHoleSummary getPiHoleSummary()
 {

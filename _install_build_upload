@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# If you get something like: "bash: ./_install_build_upload: Permission denied"
+# Run:
+# chmod 755 _install_build_upload
+# "755" will give us read, write, and execute permission
+
+echo "Install external libraries"
+arduino-cli lib install "Time"
+arduino-cli lib install "ArduinoHttpClient"
+arduino-cli lib install "ArduinoJson"
+arduino-cli lib install "WiFiNINA"
+arduino-cli lib install "WiFiNINA"
+arduino-cli lib install "LiquidCrystal"
+
+echo
+echo "Install board"
+arduino-cli core install "arduino:samd"
+
+echo
+echo "Get available boards"
+arduino-cli board list
+echo "*** Connect the microcontroller. Get the port and fqbn values above ***"
+
+echo
+echo "Verify and compile..."
+arduino-cli compile --fqbn arduino:samd:nano_33_iot
+
+echo
+echo "Upload binaries to the board..."
+arduino-cli upload --port /dev/ttyACM0 --fqbn arduino:samd:nano_33_iot
