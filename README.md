@@ -4,6 +4,7 @@ Display of Pi-hole data to an 16x2 lcd display using an Arduino NANO 33 IoT boar
 Data displayed:
  - Ads blocked today
  - Recently blocked domain
+ - Top permitted & block domains
  - Cached DNS requests
  - Black list last updated date
 
