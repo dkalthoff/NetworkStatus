@@ -1,7 +1,7 @@
 {
     "programmer": "AVR ISP",
     "board": "arduino:samd:nano_33_iot",
-    "port": "/dev/ttyACM1",
+    "port": "/dev/ttyACM0",
     "sketch": "NetworkStatus.ino",
     "output": "../NetworkStatus_build"
 }
