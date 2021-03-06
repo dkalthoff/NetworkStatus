@@ -21,6 +21,7 @@ void loop()
 
 void displayPiHoleSummary()
 {
+  displayService.sendToDisplay("Fetching Pi-hole", "Data...");
   struct PiHoleSummary piHoleSummary = piHoleService.getPiHoleSummary();
     
   // Blocked
@@ -31,7 +32,7 @@ void displayPiHoleSummary()
   delay(5000);
 
   // Recently Blocked Domain
-  if(piHoleSummary.piHole1RecentBlockedDomain == piHoleSummary.piHole2RecentBlockedDomain)
+  if(piHoleSummary.piHole1RecentBlockedDomain == piHoleSummary.piHole2RecentBlockedDomain || piHoleSummary.piHole2RecentBlockedDomain == "")
   {
     displayService.sendToDisplay("Recent Block", piHoleSummary.piHole1RecentBlockedDomain);
   }
@@ -67,14 +68,13 @@ void displayPiHoleSummary()
   row1Message = "PiHole2 BlkList";
   row2Message = "Updated:" + String(month(piHoleSummary.piHole2Updated)) + "/" + String(day(piHoleSummary.piHole2Updated)) + "/" + String(year(piHoleSummary.piHole2Updated)).substring(2);
   displayService.sendToDisplay(row1Message, row2Message);
-  delay(3000);
 }
 
 void setupSerialCommunications()
 {
   // Open serial communications and wait for port to open:
   Serial.begin(115200);
-  // while (!Serial) {
-  // ; // wait for serial port to connect. Needed for native USB port only
-  // }
+  while (!Serial) {
+  ; // wait for serial port to connect. Needed for native USB port only
+  }
 }

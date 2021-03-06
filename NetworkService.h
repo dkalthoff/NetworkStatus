@@ -100,19 +100,15 @@ class NetworkService
             // attempt to connect to Wifi network:
             while (status != WL_CONNECTED) 
             {
-                Serial.print("Attempting to connect to open SSID: ");
-                Serial.println(arduinoSecrets.SHED_SSID);
-                status = WiFi.begin(arduinoSecrets.SHED_SSID, arduinoSecrets.SHED_PASSWORD);
-
-                if(status != WL_CONNECTED)
+                for (size_t i = 0; i < arduinoSecrets.WIFI_ELEMENTS_LENGTH; i++)
                 {
-                    Serial.print("Attempting to connect to open SSID: ");
-                    Serial.println(arduinoSecrets.HOUSE_SSID);
-                    status = WiFi.begin(arduinoSecrets.HOUSE_SSID, arduinoSecrets.HOUSE_PASSWORD); 
+                    Serial.print("Attempting to connect to SSID: ");
+                    Serial.println(arduinoSecrets.WIFI_SSIDS[i]);
+                    status = WiFi.begin(arduinoSecrets.WIFI_SSIDS[i].c_str(), arduinoSecrets.WIFI_SSID_PASSWORDS[i].c_str());
                 }
 
                 // wait 10 seconds for connection:
-                delay(10000);
+                delay(5000);
             }
 
             // you're connected now, so print out the data:
@@ -126,16 +122,25 @@ class NetworkService
 
         String getHttpResponse(const char* serverAddress, String url)
         {
+            if(WiFi.status() != WL_CONNECTED)
+            {
+                connect();
+            }
+
             HttpClient httpClient = HttpClient(wifiClient, serverAddress, 80);
+            Serial.print("Request: ");
+            Serial.print(serverAddress);
+            Serial.println(url);
+
             httpClient.get(url);
 
-            int statusCode = httpClient.responseStatusCode();
-            String response = httpClient.responseBody();
-            
-            Serial.print("Response from ");
+            Serial.print("Response: ");
+            Serial.print(httpClient.responseStatusCode());
+            Serial.print(" ");
             Serial.print(serverAddress);
-            Serial.print(" StatusCode: ");
-            Serial.println(statusCode);
+            Serial.println(url);
+            String response = httpClient.responseBody(); // must first call responseStatusCode
+            Serial.print("    Body: ");
             Serial.println(response);
 
             if(!wifiClient.connected())
