@@ -104,7 +104,15 @@ class NetworkService
                 {
                     Serial.print("Attempting to connect to SSID: ");
                     Serial.println(arduinoSecrets.WIFI_SSIDS[i]);
-                    status = WiFi.begin(arduinoSecrets.WIFI_SSIDS[i].c_str(), arduinoSecrets.WIFI_SSID_PASSWORDS[i].c_str());
+
+                    if(arduinoSecrets.WIFI_SSID_PASSWORDS[i].c_str() == "")
+                    {
+                        status = WiFi.begin(arduinoSecrets.WIFI_SSIDS[i].c_str());
+                    }
+                    else
+                    {
+                        status = WiFi.begin(arduinoSecrets.WIFI_SSIDS[i].c_str(), arduinoSecrets.WIFI_SSID_PASSWORDS[i].c_str());
+                    }
                 }
 
                 // wait 10 seconds for connection:

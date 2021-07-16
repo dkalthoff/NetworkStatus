@@ -10,7 +10,6 @@ arduino-cli lib install "Time"
 arduino-cli lib install "ArduinoHttpClient"
 arduino-cli lib install "ArduinoJson"
 arduino-cli lib install "WiFiNINA"
-arduino-cli lib install "WiFiNINA"
 arduino-cli lib install "LiquidCrystal"
 
 echo
